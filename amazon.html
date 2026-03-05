@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>亚马逊ASIN日销量 - 电商数据追踪看板</title>
+    <script src="./auth.js?v=20260305"></script>
+    <script>
+      window.requireDashboardAuth("./index.html");
+    </script>
+    <link rel="stylesheet" href="./styles.css?v=20260305" />
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  </head>
+  <body class="app-shell">
+    <header class="top-nav">
+      <div class="nav-inner">
+        <a class="brand" href="./overview.html">
+          <span class="brand-icon" aria-hidden="true"></span>
+          <span class="brand-text">Data Analytics</span>
+        </a>
+        <nav class="nav-links">
+          <a class="nav-link" href="./overview.html">数据总览</a>
+          <a class="nav-link active" href="./amazon.html">亚马逊流量浮动</a>
+          <a class="nav-link" href="./influencer.html">红人</a>
+          <a class="nav-link" href="./social.html">社媒</a>
+          <a class="nav-link" href="./media.html">媒体</a>
+        </nav>
+        <div class="nav-user">
+          <span class="avatar">A</span>
+          <span class="user-name">Alex</span>
+          <button id="logoutBtn" class="logout-mini" type="button">退出</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="page-header">
+        <h1>亚马逊ASIN日销量看板</h1>
+      </section>
+
+      <section class="panel">
+        <h2>数据来源</h2>
+        <div class="upload-row">
+          <label class="file-btn" for="fileInput">上传亚马逊销售数据</label>
+          <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" />
+          <p id="fileName" class="file-name">还没有上传文件</p>
+        </div>
+        <p class="panel-hint">
+          建议列名示例：日期/销售时间、ASIN、销量（或销售件数）、广告转化率（可选，或广告订单/广告点击、销量/DPV自动计算）。
+        </p>
+      </section>
+
+      <section id="mappingPanel" class="panel hidden">
+        <h2>字段映射</h2>
+        <div class="mapping-grid three-columns">
+          <label>
+            日期列（必填）
+            <select id="dateColumn"></select>
+          </label>
+          <label>
+            ASIN列（可选）
+            <select id="asinColumn"></select>
+          </label>
+          <label>
+            销量列（必填）
+            <select id="salesColumn"></select>
+          </label>
+          <label>
+            广告转化率列（可选）
+            <select id="cvrColumn"></select>
+          </label>
+          <label>
+            广告订单列（可选）
+            <select id="adOrdersColumn"></select>
+          </label>
+          <label>
+            广告点击列（可选）
+            <select id="adClicksColumn"></select>
+          </label>
+          <label>
+            DPV列（可选）
+            <select id="dpvColumn"></select>
+          </label>
+          <label>
+            单ASIN文件标识（可选）
+            <input id="asinFallback" type="text" placeholder="如 B0G69M52V4，不填则尝试从文件名识别" />
+          </label>
+        </div>
+        <button id="applyMappingBtn" class="action-btn">应用映射并生成看板</button>
+      </section>
+
+      <section id="filterPanel" class="panel hidden">
+        <div class="toolbar-grid">
+          <label>
+            ASIN筛选
+            <select id="asinFilter"></select>
+          </label>
+          <label>
+            展示范围
+            <select id="rangeSelect">
+              <option value="all">全部</option>
+              <option value="30" selected>最近30天</option>
+              <option value="14">最近14天</option>
+              <option value="7">最近7天</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <section id="kpiPanel" class="summary-line hidden">
+        <article class="summary-item">
+          <span class="summary-label">当前ASIN</span>
+          <span id="kpiAsin" class="summary-value">-</span>
+        </article>
+        <article class="summary-item">
+          <span class="summary-label">统计天数</span>
+          <span id="kpiDays" class="summary-value">-</span>
+        </article>
+        <article class="summary-item">
+          <span class="summary-label">最近销量</span>
+          <span id="kpiLatestSales" class="summary-value">-</span>
+        </article>
+        <article class="summary-item">
+          <span class="summary-label">总销量</span>
+          <span id="kpiTotalSales" class="summary-value">-</span>
+        </article>
+        <article class="summary-item">
+          <span class="summary-label">日均销量</span>
+          <span id="kpiAvgSales" class="summary-value">-</span>
+        </article>
+        <article class="summary-item">
+          <span class="summary-label">最新广告转化率</span>
+          <span id="kpiLatestCvr" class="summary-value">-</span>
+        </article>
+      </section>
+
+      <section id="chartPanel" class="source-grid hidden">
+        <article class="panel">
+          <h2 id="trendChartTitle">日销量与广告转化率趋势</h2>
+          <p id="trendChartNote" class="chart-title-note">等待加载数据</p>
+          <div class="chart-wrap">
+            <canvas id="amazonTrendChart"></canvas>
+          </div>
+        </article>
+        <article class="panel">
+          <h2 id="changeChartTitle">环比变化</h2>
+          <p id="changeChartNote" class="chart-title-note">等待加载数据</p>
+          <div class="chart-wrap">
+            <canvas id="amazonChangeChart"></canvas>
+          </div>
+        </article>
+      </section>
+
+      <section id="tablePanel" class="panel hidden">
+        <h2>ASIN每日明细</h2>
+        <p id="amazonTableSummary" class="table-kpi"></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="sortable" data-sort-key="date">日期</th>
+                <th class="sortable" data-sort-key="asin">ASIN</th>
+                <th class="sortable" data-sort-key="sales">销量</th>
+                <th class="sortable" data-sort-key="cvr">广告转化率</th>
+                <th class="sortable" data-sort-key="salesChange">销量环比</th>
+                <th class="sortable" data-sort-key="cvrChange">转化率变化</th>
+              </tr>
+            </thead>
+            <tbody id="amazonTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="emptyState" class="panel empty-state">
+        上传亚马逊文件并完成字段映射后，这里会自动生成 ASIN 销量曲线和广告转化率分析。
+      </section>
+    </main>
+
+    <script src="./amazon.js?v=20260305"></script>
+    <script>
+      window.bindLogoutButton("logoutBtn", "./index.html");
+    </script>
+  </body>
+</html>
