@@ -1,71 +1,70 @@
-# 辅助生殖阅读站点（单层上传版）
+# Bluneo.ai Hero Section
 
-这个目录是给 GitHub 网页上传准备的“单层根目录版”。
+这是一个可以直接上传到 GitHub 的完整 Next.js 项目。页面包含一个黑色 AI / SaaS 风格 hero section，右侧主视觉由 8 个 CSS 玻璃蓝色椭圆花瓣组成，并使用 Framer Motion 做慢速旋转、漂浮、呼吸和 hover 动效。
 
-## 适用场景
+## 本地运行
 
-- 你在 GitHub 网页里只能逐个上传文件
-- 不能保留 `docs/`、`assets/`、`books/`、`notes/` 这样的文件夹结构
-- 需要把所有文件摊平到仓库根目录
-
-## 你应该上传哪些文件
-
-把这个目录里的**所有文件**上传到 GitHub 仓库根目录：
-
-- `index.html`
-- `assist-tech.html`
-- `zh-upper.html`
-- `zh-middle.html`
-- `zh-lower.html`
-- `ivf-workflow.html`
-- `styles.css`
-- `app.js`
-- `paper-texture.svg`
-- `ivf-journey.svg`
-- `试管婴儿相关章节提炼.md`
-- `试管流程笔记.md`
-- `README.md`
-- `.nojekyll`
-
-## 上传后 GitHub 仓库根目录应该长这样
-
-```text
-README.md
-.nojekyll
-index.html
-assist-tech.html
-zh-upper.html
-zh-middle.html
-zh-lower.html
-ivf-workflow.html
-styles.css
-app.js
-paper-texture.svg
-ivf-journey.svg
-试管婴儿相关章节提炼.md
-试管流程笔记.md
+```bash
+npm install
+npm run dev
 ```
 
-## GitHub Pages 设置
+打开：
 
-去仓库：
+```text
+http://localhost:3000
+```
 
-`Settings` → `Pages`
+## 上传到 GitHub
 
-设置为：
+把本目录里的所有文件上传到一个 GitHub 仓库。
 
-- `Source`: `Deploy from a branch`
-- `Branch`: `main`
-- `Folder`: `/ (root)`
+推荐仓库名：
 
-## 访问地址
+```text
+ivf-notes
+```
 
-如果你的仓库名是 `ivf-notes`，而 GitHub 用户名是 `你的用户名`，地址通常会是：
+## 用 GitHub Pages 发布
 
-`https://你的用户名.github.io/ivf-notes/`
+这个项目已经带了 GitHub Actions workflow：
 
-## 当前版本说明
+```text
+.github/workflows/deploy.yml
+```
 
-- 已经改成根目录平铺结构
-- 所有页面链接和资源路径已经改成同层引用
-- 适合直接在 GitHub 网页逐个上传文件
+上传后去仓库：
+
+```text
+Settings -> Pages
+```
+
+把 Source 设为：
+
+```text
+GitHub Actions
+```
+
+之后每次 push 到 `main`，GitHub 会自动构建并发布。
+
+如果仓库名是 `ivf-notes`，发布地址通常是：
+
+```text
+https://你的用户名.github.io/ivf-notes/
+```
+
+## 主要文件
+
+- `app/page.tsx`: 页面入口
+- `components/BluneoHeroSection.tsx`: 核心组件
+- `app/globals.css`: 全局样式和 Tailwind 引入
+- `tailwind.config.ts`: Tailwind 配置
+- `next.config.mjs`: 静态导出和 GitHub Pages 路径配置
+
+## 依赖
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Framer Motion
