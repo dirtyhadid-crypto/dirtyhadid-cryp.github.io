@@ -2,9 +2,9 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import type { CSSProperties } from "react";
+import { navItems } from "@/lib/content";
 
-const navItems = ["Home", "Why us", "How it works"];
-const logos = ["AURORA", "NEXUS", "ORBIT", "VECTOR", "LUCENT"];
+const logos = ["IVF-ET", "ICSI", "PGT", "FET", "LAB QC"];
 
 const petals = Array.from({ length: 8 }, (_, index) => ({
   angle: index * 45,
@@ -38,29 +38,29 @@ export default function BluneoHeroSection() {
           transition={{ duration: 0.7, ease: easeOut }}
           className="flex items-center justify-between gap-5"
         >
-          <a href="#" className="text-[15px] font-semibold text-white">
-            Bluneo.ai
+          <a href="./" className="text-[15px] font-semibold text-white">
+            IVF Notes
           </a>
 
           <nav className="hidden items-center gap-9 text-sm font-medium text-[#8A8F98] md:flex">
             {navItems.map((item) => (
               <a
-                key={item}
-                href="#"
+                key={item.href}
+                href={`.${item.href}`}
                 className="transition-colors duration-300 hover:text-white"
               >
-                {item}
+                {item.label}
               </a>
             ))}
           </nav>
 
           <motion.a
-            href="#"
+            href="./ivf-workflow"
             whileHover={shouldReduceMotion ? undefined : { scale: 1.04 }}
             whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
             className="rounded-full bg-[#0B6BFF] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_28px_rgba(11,107,255,0.34)] transition-shadow duration-300 hover:shadow-[0_0_42px_rgba(20,123,255,0.62)]"
           >
-            Contact
+            IVF Workflow
           </motion.a>
         </motion.header>
 
@@ -83,7 +83,7 @@ export default function BluneoHeroSection() {
                 variants={fadeUp}
                 className="mb-7 inline-flex rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-[#A8B3C5] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl"
               >
-                Advanced AI Systems
+                Evidence-based IVF Notes
               </motion.div>
 
               <motion.h1
@@ -97,25 +97,25 @@ export default function BluneoHeroSection() {
                 }}
                 className="max-w-[720px] text-5xl font-semibold leading-[0.96] text-[#F8FAFC] sm:text-6xl lg:text-[76px]"
               >
-                Design intelligent systems that move, adapt, and scale
+                Work for JaJa Baby: From Age 0 to 100
               </motion.h1>
 
               <motion.p
                 variants={fadeUp}
                 className="mt-7 max-w-[510px] text-base font-medium leading-7 text-[#8A8F98] sm:text-lg"
               >
-                Build AI experiences that feel fluid, responsive, and deeply
-                integrated.
+                A calm reading system for IVF-ET, ICSI, PGT, FET and assisted
+                reproductive technology notes.
               </motion.p>
 
               <motion.div variants={fadeUp} className="mt-9">
                 <motion.a
-                  href="#"
+                  href="./books"
                   whileHover={shouldReduceMotion ? undefined : { scale: 1.04 }}
                   whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
                   className="inline-flex rounded-full bg-[#0B6BFF] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_0_34px_rgba(11,107,255,0.42)] transition-shadow duration-300 hover:shadow-[0_0_56px_rgba(20,123,255,0.72)]"
                 >
-                  Start building
+                  Start reading
                 </motion.a>
               </motion.div>
             </motion.div>
