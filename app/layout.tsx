@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Bluneo.ai",
-  description: "A futuristic AI SaaS hero section with a glass petal motion logo."
+  title: "Work for JaJa Baby: From Age 0 to 100",
+  description: "IVF Notes: structured reading notes for assisted reproductive technology."
 };
 
 export default function RootLayout({
@@ -12,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="zh-CN">
       <body>{children}</body>
     </html>
   );
